@@ -48,7 +48,7 @@ public class ImprovedTrack : MonoBehaviour
 
             switch(i){
             // corners of quad
-            case 0:
+            /*case 0:
                 vert1 = new Vector3(-1 * size.x, -1 * size.y, size.z) + pos;
                 vert2 = new Vector3(-1 * size.x, size.y, size.z) + pos;
                 vert3 = new Vector3(size.x, size.y, size.z) + pos;
@@ -56,12 +56,12 @@ public class ImprovedTrack : MonoBehaviour
                 break;
 
             case 1:
-                vert1 = new Vector3(-1 * size.x, -1 * size.y, -1 * size.z) + pos;
-                vert2 = new Vector3(-1 * size.x, size.y, -1 * size.z) + pos;
-                vert3 = new Vector3(size.x, size.y, -1 * size.z) + pos;
-                vert4 = new Vector3(size.x, -1 * size.y, -1 * size.z) + pos;
+                vert4 = new Vector3(-1 * size.x, -1 * size.y, -1 * size.z) + pos;
+                vert3 = new Vector3(-1 * size.x, size.y, -1 * size.z) + pos;
+                vert2 = new Vector3(size.x, size.y, -1 * size.z) + pos;
+                vert1 = new Vector3(size.x, -1 * size.y, -1 * size.z) + pos;
                 break;
-
+                
             case 2:
                 vert1 = new Vector3(-1 * size.x, -1 * size.y, size.z) + pos;
                 vert2 = new Vector3(-1 * size.x, size.y, size.z) + pos;
@@ -70,10 +70,24 @@ public class ImprovedTrack : MonoBehaviour
                 break;
 
             case 3:
+                vert4 = new Vector3(size.x, -1 * size.y, size.z) + pos;
+                vert3 = new Vector3(size.x, size.y, size.z) + pos;
+                vert2 = new Vector3(size.x, size.y, -1 * size.z) + pos;
+                vert1 = new Vector3(size.x, -1 * size.y, -1 * size.z) + pos;
+                break;
+                */
+            case 4:
                 vert1 = new Vector3(size.x, -1 * size.y, size.z) + pos;
-                vert2 = new Vector3(size.x, size.y, size.z) + pos;
-                vert3 = new Vector3(size.x, size.y, -1 * size.z) + pos;
+                vert2 = new Vector3(-1 * size.x, -1 * size.y, size.z) + pos;
+                vert3 = new Vector3(-1 * size.x, -1 * size.y, -1 * size.z) + pos;
                 vert4 = new Vector3(size.x, -1 * size.y, -1 * size.z) + pos;
+                break;
+
+            case 5:
+                vert4 = new Vector3(size.x, size.y, size.z) + pos;
+                vert3 = new Vector3(-1 * size.x, size.y, size.z) + pos;
+                vert2 = new Vector3(-1 * size.x, size.y, -1 * size.z) + pos;
+                vert1 = new Vector3(size.x, size.y, -1 * size.z) + pos;
                 break;
 
             }
