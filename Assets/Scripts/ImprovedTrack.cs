@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class ImprovedTrack : MonoBehaviour
 {
@@ -40,13 +41,42 @@ public class ImprovedTrack : MonoBehaviour
 
             int addval = Fmesh.vertices.Length;
 
-            int xmult = i - 1;
+            Vector3 vert1 = new Vector3(0, 0, 0);
+            Vector3 vert2 = new Vector3(0, 0, 0);
+            Vector3 vert3 = new Vector3(0, 0, 0);
+            Vector3 vert4 = new Vector3(0, 0, 0);
 
+            switch(i){
             // corners of quad
-            Vector3 vert1 = new Vector3(-.5f, -.5f, 0) + pos;
-            Vector3 vert2 = new Vector3(-.5f, .5f, 0) + pos;
-            Vector3 vert3 = new Vector3(.5f, .5f, 0) + pos;
-            Vector3 vert4 = new Vector3(.5f, -.5f, 0) + pos;
+            case 0:
+                vert1 = new Vector3(-1 * size.x, -1 * size.y, size.z) + pos;
+                vert2 = new Vector3(-1 * size.x, size.y, size.z) + pos;
+                vert3 = new Vector3(size.x, size.y, size.z) + pos;
+                vert4 = new Vector3(size.x, -1 * size.y, size.z) + pos;
+                break;
+
+            case 1:
+                vert1 = new Vector3(-1 * size.x, -1 * size.y, -1 * size.z) + pos;
+                vert2 = new Vector3(-1 * size.x, size.y, -1 * size.z) + pos;
+                vert3 = new Vector3(size.x, size.y, -1 * size.z) + pos;
+                vert4 = new Vector3(size.x, -1 * size.y, -1 * size.z) + pos;
+                break;
+
+            case 2:
+                vert1 = new Vector3(-1 * size.x, -1 * size.y, size.z) + pos;
+                vert2 = new Vector3(-1 * size.x, size.y, size.z) + pos;
+                vert3 = new Vector3(-1 * size.x, size.y, -1 * size.z) + pos;
+                vert4 = new Vector3(-1 * size.x, -1 * size.y, -1 * size.z) + pos;
+                break;
+
+            case 3:
+                vert1 = new Vector3(size.x, -1 * size.y, size.z) + pos;
+                vert2 = new Vector3(size.x, size.y, size.z) + pos;
+                vert3 = new Vector3(size.x, size.y, -1 * size.z) + pos;
+                vert4 = new Vector3(size.x, -1 * size.y, -1 * size.z) + pos;
+                break;
+
+            }
 
             //2
             newVertices.Add(vert1);
