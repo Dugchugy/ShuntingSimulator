@@ -5,7 +5,11 @@ using System;
 
 public class ImprovedTrack : MonoBehaviour
 {
+    public const int PERECISION = 100;
+
     public Vector3[] points;
+
+    public float Length;
 
 
 
@@ -16,12 +20,18 @@ public class ImprovedTrack : MonoBehaviour
 
         Mesh cloneMesh = new Mesh();
 
+        Length = readLength(PERECISION);
+
         cloneMesh.name = "Track";
 
         meshF.mesh = cloneMesh;
 
-        for(int i = 0; i < 11; i++){
-            CreateRect(FindPoint(points, i / 10.0f), cloneMesh, new Vector3(0.1f, 0.1f, 0.5f), FindDir(points, i / 10.0f));
+        int lenth = (int) (Length);
+
+        for(int i = 0; i < lenth; i++){
+            float t = FindTLength((float) (i), PERECISION);
+
+            CreateRect(FindPoint(points, t), cloneMesh, new Vector3(0.1f, 0.1f, 0.5f), FindDir(points, t));
         }
 
     }
@@ -167,5 +177,48 @@ public class ImprovedTrack : MonoBehaviour
 
         //finds the points within remaining points
         return(FindPoint(outpts, t));
+    }
+
+    public float readLength(int reps){
+        //creates a varaible to store the length
+        float length = 0;
+
+        //uses the reps variable to subdivide the curve into linear segments
+        for(int i = 1; i < reps; i++){
+            //adds the distance between the two points to the length
+            length += Vector3.Distance(FindPoint(points, ((float) (i-1))/reps), FindPoint(points, ((float) (i))/reps));
+        }
+
+        //returns the length value
+        return length;
+    }
+
+    public float FindTLength(float dist, int reps){
+        //creates a variable to store the Length
+        float length = 0;
+
+        //uses the reps varaible to subdivide the curve into linear segments
+        for(int i = 1; i < reps; i++){
+            //stores the distance between the two points
+            float segDist = Vector3.Distance(FindPoint(points, ((float) (i-1))/reps), FindPoint(points, ((float) (i))/reps));
+
+            //adds  the distance to the current Length
+            length += segDist;
+
+            //checks if the current length of the arc is longer than the desired Distance
+            if(length > dist){
+                //calculated the difference betweent he used t values
+                float Tdist = (((float) (i))/reps) - (((float) i - 1)/reps);
+
+                float desT = Tdist * ((dist - (length - segDist))/segDist);
+
+                desT += (((float) i - 1)/reps);
+
+                return(desT);
+
+            }
+        }
+
+        return(1.0f);
     }
 }
