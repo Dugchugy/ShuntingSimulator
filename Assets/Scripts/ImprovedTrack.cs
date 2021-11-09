@@ -10,7 +10,7 @@ public class ImprovedTrack : MonoBehaviour
 
     public const int PERECISION = 100;
 
-    public Vector3[] points;
+    public Vector3[][] points = new Vector3[1][] {new Vector3[] {new Vector3(-10, 0, 0), new Vector3(-5, 0, 0), new Vector3(-5, 0, 5), new Vector3(0, 0, 5)}};
 
     public float Length;
 
@@ -19,43 +19,65 @@ public class ImprovedTrack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //reads the current mesh filter
         MeshFilter meshF = GetComponent<MeshFilter>();
 
+        //creates a new mesh to edit
         Mesh cloneMesh = new Mesh();
 
-        Length = readLength(PERECISION);
-
+        //give the new mesh two submeshes
         cloneMesh.subMeshCount = 2;
 
+        //names the mesh track
         cloneMesh.name = "Track";
 
+        //sets the mesh as the current mesh in the mesh filter
         meshF.mesh = cloneMesh;
 
-        int lenth = (int) (Length);
+        //loops for every track section in hte track points array
+        for(int j = 0; j < points.Length; j++){
 
-        float offset = (Length - lenth) / 2.0f;
+            //estimates the current length of the track segment to the specified PERECISION;
+            Length = readLength(PERECISION, j);
 
-        CreateRailEnds(FindPoint(points, 0), cloneMesh, new Vector2(0.2f, 0.1f), FindDir(points, 0), new Vector2(0.1f, 0.7f));
+            //defines lenth as the length floored to an int
+            int lenth = (int) (Length);
 
-        for(int i = 0; i <= lenth; i++){
-            float t = FindTLength(offset + (float) (i), PERECISION);
+            //generates a fractional offset from the start that the ties generate at
+            float offset = (Length - lenth) / 2.0f;
 
-            float t2;
+            //creates ends for the begining of the rails
+            CreateRailEnds(FindPoint(points[j], 0), cloneMesh, new Vector2(0.2f, 0.1f), FindDir(points[j], 0), new Vector2(0.1f, 0.7f));
 
-            if(i == 0){
-                t2 = 0.0f;
-            }else{
-                t2 = FindTLength(offset + (float) (i - 1), PERECISION);
+            //loops through all the required ties
+            for(int i = 0; i <= lenth; i++){
+
+                //estimates the t value based on the distance along the curve
+                float t = FindTLength(offset + (float) (i), PERECISION, j);
+
+                //estimates the previous t value or assumes it to be zero
+                float t2;
+
+                if(i == 0){
+                    t2 = 0.0f;
+                }else{
+                    t2 = FindTLength(offset + (float) (i - 1), PERECISION, j);
+                }
+
+                //generates a section of rails for the track
+                CreateRailSection(t2, t, cloneMesh, new Vector2(0.2f, 0.1f), new Vector2(0.1f, 0.7f), j);
+
+                //creates a tie under the rails
+                CreateRect(FindPoint(points[j], t), cloneMesh, new Vector3(0.1f, 0.1f, 1.0f), FindDir(points[j], t));
             }
 
-            CreateRailSection(t2, t, cloneMesh, new Vector2(0.2f, 0.1f), new Vector2(0.1f, 0.7f));
+            //creates the final segment
+            CreateRailSection(FindTLength(offset + lenth, PERECISION, j), 1.0f, cloneMesh, new Vector2(0.2f, 0.1f), new Vector2(0.1f, 0.7f), j);
 
-            CreateRect(FindPoint(points, t), cloneMesh, new Vector3(0.1f, 0.1f, 1.0f), FindDir(points, t));
+            //caps off the ends of the rails
+            CreateRailEnds(FindPoint(points[j], 1), cloneMesh, new Vector2(0.2f, 0.1f), FindDir(points[j], 1), new Vector2(0.1f, 0.7f));
+
         }
-
-        CreateRailSection(FindTLength(offset + lenth, PERECISION), 1.0f, cloneMesh, new Vector2(0.2f, 0.1f), new Vector2(0.1f, 0.7f));
-
-        CreateRailEnds(FindPoint(points, 1), cloneMesh, new Vector2(0.2f, 0.1f), FindDir(points, 1), new Vector2(0.1f, 0.7f));
 
         MeshRenderer mr = GetComponent<MeshRenderer>();
 
@@ -131,13 +153,13 @@ public class ImprovedTrack : MonoBehaviour
         }
     }
 
-    void CreateRailSection(float t1, float t2, Mesh Fmesh, Vector2 size, Vector2 offset){
+    void CreateRailSection(float t1, float t2, Mesh Fmesh, Vector2 size, Vector2 offset, int j){
 
-        Vector3 pos1 = FindPoint(points, t1);
-        Vector3 x1 = FindDir(points, t1);
+        Vector3 pos1 = FindPoint(points[j], t1);
+        Vector3 x1 = FindDir(points[j], t1);
 
-        Vector3 pos2 = FindPoint(points, t2);
-        Vector3 x2 = FindDir(points, t2);
+        Vector3 pos2 = FindPoint(points[j], t2);
+        Vector3 x2 = FindDir(points[j], t2);
 
         Vector3 y = Vector3.up;
 
@@ -382,28 +404,28 @@ public class ImprovedTrack : MonoBehaviour
         return(FindPoint(outpts, t));
     }
 
-    public float readLength(int reps){
+    public float readLength(int reps, int j){
         //creates a varaible to store the length
         float length = 0;
 
         //uses the reps variable to subdivide the curve into linear segments
         for(int i = 1; i < reps; i++){
             //adds the distance between the two points to the length
-            length += Vector3.Distance(FindPoint(points, ((float) (i-1))/reps), FindPoint(points, ((float) (i))/reps));
+            length += Vector3.Distance(FindPoint(points[j], ((float) (i-1))/reps), FindPoint(points[j], ((float) (i))/reps));
         }
 
         //returns the length value
         return length;
     }
 
-    public float FindTLength(float dist, int reps){
+    public float FindTLength(float dist, int reps, int j){
         //creates a variable to store the Length
         float length = 0;
 
         //uses the reps varaible to subdivide the curve into linear segments
         for(int i = 1; i < reps; i++){
             //stores the distance between the two points
-            float segDist = Vector3.Distance(FindPoint(points, ((float) (i-1))/reps), FindPoint(points, ((float) (i))/reps));
+            float segDist = Vector3.Distance(FindPoint(points[j], ((float) (i-1))/reps), FindPoint(points[j], ((float) (i))/reps));
 
             //adds  the distance to the current Length
             length += segDist;
