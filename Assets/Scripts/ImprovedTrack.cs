@@ -19,6 +19,10 @@ public class ImprovedTrack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        points = TrackLoader.LoadTrack("Tracks/Test");
+
+        //TrackLoader.LoadTrack("Tracks/Test");
+
         //reads the current mesh filter
         MeshFilter meshF = GetComponent<MeshFilter>();
 
