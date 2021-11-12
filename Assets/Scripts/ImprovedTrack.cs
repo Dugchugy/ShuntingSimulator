@@ -12,7 +12,7 @@ public class ImprovedTrack : MonoBehaviour
 
     public Vector3[][] points = new Vector3[1][] {new Vector3[] {new Vector3(-10, 0, 0), new Vector3(-5, 0, 0), new Vector3(-5, 0, 5), new Vector3(0, 0, 5)}};
 
-    public float Length;
+    public float Length = 0;
 
 
 
@@ -42,13 +42,15 @@ public class ImprovedTrack : MonoBehaviour
         for(int j = 0; j < points.Length; j++){
 
             //estimates the current length of the track segment to the specified PERECISION;
-            Length = readLength(PERECISION, j);
+            float Len = readLength(PERECISION, j);
+
+            Length += Len;
 
             //defines lenth as the length floored to an int
-            int lenth = (int) (Length);
+            int lenth = (int) (Len);
 
             //generates a fractional offset from the start that the ties generate at
-            float offset = (Length - lenth) / 2.0f;
+            float offset = (Len - lenth) / 2.0f;
 
             //creates ends for the begining of the rails
             CreateRailEnds(FindPoint(points[j], 0), cloneMesh, new Vector2(0.2f, 0.1f), FindDir(points[j], 0), new Vector2(0.1f, 0.7f));
@@ -88,10 +90,18 @@ public class ImprovedTrack : MonoBehaviour
         mr.materials = new Material[2] {TIEMAT, RAILMAT};
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    public Vector3 trackPosition(float pos){
 
+        for(int i = 0; i < points.Length; i++){
+            if(readLength(PERECISION, i) > pos){
+                float t = FindTLength(pos, PERECISION, i);
+                return(FindPoint(points[i], t));
+            }
+
+            pos -= readLength(PERECISION, i);
+        }
+
+        return(FindPoint(points[points.Length - 1], 1));
     }
 
     void CreateRailEnds(Vector3 pos, Mesh Fmesh, Vector2 size, Vector3 x, Vector2 offset){
