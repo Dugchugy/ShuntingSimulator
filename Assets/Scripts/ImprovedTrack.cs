@@ -104,6 +104,42 @@ public class ImprovedTrack : MonoBehaviour
         return(FindPoint(points[points.Length - 1], 1));
     }
 
+    public float ClosestPos(Vector3 p, int reps)
+    {
+        //creates varaibels to store the current distance and closest point
+        float dist = 100000;
+        Vector3 closest = points[0][0];
+
+        //creates some variables to store the distance from the start of the track
+        float trackDist = 0;
+        float closestDist = 0;
+
+        Vector3 current = closest;
+
+        Vector3 prev = trackPosition(0);
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            for(int j = 0; j < reps; j++)
+            {
+                current = FindPoint(points[i], ((float) j) / reps);
+
+                if(Vector3.Distance(current, p) < dist){
+                    closest = current;
+                    dist = Vector3.Distance(current, p);
+
+                    closestDist = trackDist;
+                }
+
+                trackDist += Vector3.Distance(prev, current);
+
+                prev = current;
+            }
+        }
+
+        return (closestDist);
+    }
+    
     void CreateRailEnds(Vector3 pos, Mesh Fmesh, Vector2 size, Vector3 x, Vector2 offset){
         //defines y as the vertical direction (positive up)
         Vector3 y = Vector3.up;

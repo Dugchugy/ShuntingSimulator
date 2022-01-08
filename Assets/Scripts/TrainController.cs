@@ -10,10 +10,13 @@ public class TrainController : MonoBehaviour
 
     public ImprovedTrack track;
 
+    private Connection c;
+
     // Start is called before the first frame update
     void Start()
     {
         track = GameObject.Find("TrackSegment").GetComponent<ImprovedTrack>();
+        c = GetComponent<Connection>();
     }
 
     // Update is called once per frame
@@ -27,6 +30,6 @@ public class TrainController : MonoBehaviour
             position += track.Length;
         }
 
-        transform.position = track.trackPosition(position);
+        c.ends[0].dist = position;
     }
 }
