@@ -39,8 +39,12 @@ public class Connection : MonoBehaviour
 
         Vector3 diff = ends[0].pos - ends[1].pos;
 
-        double angle = (Math.Atan2(diff.x, diff.z)) * (180 / Math.PI);
-        transform.eulerAngles = new Vector3(-90, (float)(angle), 0);
+        //double angle = (Math.Atan2(diff.z, diff.x)) * (180 / Math.PI);
+        //transform.eulerAngles = new Vector3(-90, (float)(angle), 0);
+
+        transform.LookAt(transform.position + diff);
+
+        Debug.Log("DeltaTime: " + Time.deltaTime);
     }
 
     void FixedUpdate()
@@ -50,21 +54,22 @@ public class Connection : MonoBehaviour
         {
             ends[i].pos = track.trackPosition(ends[i].dist);
         }
-        
-        int a = 1;
 
         for (int i = 0; i < 2; i++){
             if (ends[i].pos != prevends[i])
             {
-                ends[a].dist = track.ClosestPos(ends[i].pos + (ends[i].pos - ends[a].pos) * length, 100);
+                int a  = Math.Abs(i - 1);
+
+                ends[a].dist = track.ClosestPos(ends[i].dist, ends[a].dist, length, 10);
                 ends[a].pos = track.trackPosition(ends[a].dist);
+
+                prevends[a] = ends[a].pos;
             }
 
             prevends[i] = ends[i].pos;
-
-            a--;
         }
-        
+
+
 
 
     }

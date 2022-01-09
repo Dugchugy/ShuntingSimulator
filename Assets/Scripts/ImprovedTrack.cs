@@ -8,7 +8,7 @@ public class ImprovedTrack : MonoBehaviour
     [SerializeField] private Material TIEMAT;
     [SerializeField] private Material RAILMAT;
 
-    public const int PERECISION = 100;
+    public const int PERECISION = 50;
 
     public Vector3[][] points = new Vector3[1][] {new Vector3[] {new Vector3(-10, 0, 0), new Vector3(-5, 0, 0), new Vector3(-5, 0, 5), new Vector3(0, 0, 5)}};
 
@@ -104,8 +104,33 @@ public class ImprovedTrack : MonoBehaviour
         return(FindPoint(points[points.Length - 1], 1));
     }
 
-    public float ClosestPos(Vector3 p, int reps)
+    public float ClosestPos(float start, float end, float Distance, int reps)
     {
+
+        float current = start;
+
+        for(int i = 1; i < reps + 1; i++){
+
+            int mult = 1;
+            if(Vector3.Distance(trackPosition(current), trackPosition(start)) > Distance){
+                mult = -1;
+            }
+
+            if(start > end){
+                mult *= -1;
+            }
+
+            current += (Distance/i) * mult;
+
+            if(current < 0){
+                current += Length;
+            }else if(current > Length){
+                current -= Length;
+            }
+        }
+
+
+        /*
         //creates varaibels to store the current distance and closest point
         float dist = 100000;
         Vector3 closest = points[0][0];
@@ -136,10 +161,11 @@ public class ImprovedTrack : MonoBehaviour
                 prev = current;
             }
         }
+        */
 
-        return (closestDist);
+        return (current);
     }
-    
+
     void CreateRailEnds(Vector3 pos, Mesh Fmesh, Vector2 size, Vector3 x, Vector2 offset){
         //defines y as the vertical direction (positive up)
         Vector3 y = Vector3.up;
