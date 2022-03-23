@@ -109,10 +109,15 @@ public class ImprovedTrack : MonoBehaviour
 
         float current = start;
 
+        Vector3 startpos = trackPosition(start);
+
         for(int i = 1; i < reps + 1; i++){
 
             int mult = 1;
-            if(Vector3.Distance(trackPosition(current), trackPosition(start)) > Distance){
+
+            float currentDist = Vector3.Distance(trackPosition(current), startpos);
+
+            if(currentDist > Distance){// && currentDist < 5 * Distance){
                 mult = -1;
             }
 

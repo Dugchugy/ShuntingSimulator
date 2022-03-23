@@ -39,7 +39,7 @@ public class Connection : MonoBehaviour
 
         Vector3 diff = ends[0].pos - ends[1].pos;
 
-        //double angle = (Math.Atan2(diff.z, diff.x)) * (180 / Math.PI);
+        //double angle = (Math.Atan2(diff.x, diff.z)) * (180 / Math.PI);
         //transform.eulerAngles = new Vector3(-90, (float)(angle), 0);
 
         transform.LookAt(transform.position + diff);
