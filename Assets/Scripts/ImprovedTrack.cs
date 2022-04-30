@@ -121,7 +121,7 @@ public class ImprovedTrack : MonoBehaviour
                 mult = -1;
             }
 
-            if(start > end){
+            if(start > end && start - (3 * Distance) < end){
                 mult *= -1;
             }
 

@@ -44,7 +44,7 @@ public class Connection : MonoBehaviour
 
         transform.LookAt(transform.position + diff);
 
-        Debug.Log("DeltaTime: " + Time.deltaTime);
+        //Debug.Log("DeltaTime: " + Time.deltaTime);
     }
 
     void FixedUpdate()
@@ -58,9 +58,23 @@ public class Connection : MonoBehaviour
         for (int i = 0; i < 2; i++){
             if (ends[i].pos != prevends[i])
             {
+                //finds the endex of the other point
                 int a  = Math.Abs(i - 1);
 
-                ends[a].dist = track.ClosestPos(ends[i].dist, ends[a].dist, length, 10);
+                //finds the sign of the track distance between points
+                float DistSign = Math.Sign(ends[a].dist - ends[i].dist);
+
+
+                if(Math.Abs(ends[a].dist - ends[i].dist) > 3 * length){
+                    DistSign *= -1;
+                }
+
+                Debug.Log(DistSign);
+
+                ends[a].dist = ends[i].dist + (length * DistSign);
+
+                ends[a].dist = ensureTrack(ends[a].dist);
+
                 ends[a].pos = track.trackPosition(ends[a].dist);
 
                 prevends[a] = ends[a].pos;
@@ -68,9 +82,16 @@ public class Connection : MonoBehaviour
 
             prevends[i] = ends[i].pos;
         }
+    }
 
+    private float ensureTrack(float x){
+        if(x > track.Length){
+            x -= track.Length;
+        }
+        if(x < 0){
+            x += track.Length;
+        }
 
-
-
+        return(x);
     }
 }

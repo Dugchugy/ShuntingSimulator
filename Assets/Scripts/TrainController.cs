@@ -28,6 +28,11 @@ public class TrainController : MonoBehaviour
 
         if(position < 0){
             position += track.Length;
+
+            Debug.Log(track.Length);
+        }
+        if(position > track.Length){
+            position -= track.Length;
         }
 
         c.ends[0].dist = position;
