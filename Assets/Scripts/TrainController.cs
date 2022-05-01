@@ -6,7 +6,7 @@ public class TrainController : MonoBehaviour
 {
     public float SPEED = 100;
 
-    public float position = 0;
+    public float position = 30;
 
     public ImprovedTrack track;
 

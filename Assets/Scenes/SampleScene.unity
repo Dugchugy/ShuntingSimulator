@@ -744,6 +744,13 @@ MonoBehaviour:
   length: 2
   prevends: []
   track: {fileID: 0}
+  connected:
+  - {fileID: 0}
+  - {fileID: 3172651501937216748}
+  connectIndex: 0000000000000000
+  startDist:
+  - 30
+  - 28
 --- !u!33 &57886775622609378
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -850,6 +857,13 @@ MonoBehaviour:
   length: 9
   prevends: []
   track: {fileID: 700112360}
+  connected:
+  - {fileID: 1785833624}
+  - {fileID: 6833845462973750322}
+  connectIndex: 0100000000000000
+  startDist:
+  - 28
+  - 19
 --- !u!23 &3965271911851388217
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -940,6 +954,13 @@ MonoBehaviour:
   length: 9
   prevends: []
   track: {fileID: 700112360}
+  connected:
+  - {fileID: 6833845462973750322}
+  - {fileID: 0}
+  connectIndex: 0100000000000000
+  startDist:
+  - 10
+  - 1
 --- !u!23 &5032295730293292519
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1030,6 +1051,13 @@ MonoBehaviour:
   length: 9
   prevends: []
   track: {fileID: 700112360}
+  connected:
+  - {fileID: 3172651501937216748}
+  - {fileID: 4335185846074539261}
+  connectIndex: 0100000000000000
+  startDist:
+  - 19
+  - 10
 --- !u!33 &7075921391832811821
 MeshFilter:
   m_ObjectHideFlags: 0
