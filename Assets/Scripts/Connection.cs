@@ -14,6 +14,11 @@ public class Connection : MonoBehaviour
 
     public ImprovedTrack track;
 
+    public GameObject[] connected = new GameObject[2];
+
+    public int[] connectIndex = new int[2];
+    private Connection[] ConnectConnect = new Connection[2];
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +32,14 @@ public class Connection : MonoBehaviour
         {
             ends[i] = new TrackPoint(0, transform.position);
             prevends[i] = ends[i].pos;
+        }
+
+        for(int i = 0; i < 2; i++){
+            if(connected[i] != null){
+                ConnectConnect[i] = connected[i].GetComponent<Connection>();
+            }else{
+                connected[i] = null;
+            }
         }
     }
 
@@ -54,6 +67,11 @@ public class Connection : MonoBehaviour
         {
             ends[i].pos = track.trackPosition(ends[i].dist);
         }
+
+        UpdateConenctions();
+    }
+
+    public void UpdateConnections(){
 
         for (int i = 0; i < 2; i++){
             if (ends[i].pos != prevends[i])
