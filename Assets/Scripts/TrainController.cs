@@ -15,8 +15,11 @@ public class TrainController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         track = GameObject.Find("TrackSegment").GetComponent<ImprovedTrack>();
         c = GetComponent<Connection>();
+
+        position = c.startDist[0];
     }
 
     // Update is called once per frame

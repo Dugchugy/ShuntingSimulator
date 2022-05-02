@@ -14,6 +14,8 @@ public class Connection : MonoBehaviour
 
     public ImprovedTrack track;
 
+    public Vector3 offset = new Vector3();
+
     public GameObject[] connected = new GameObject[2];
 
     public int[] connectIndex = new int[2];
@@ -50,6 +52,8 @@ public class Connection : MonoBehaviour
     {
         //updates  the position of the cart
         transform.position = (ends[0].pos + ends[1].pos) / 2;
+
+        transform.position += offset;
 
 
         Vector3 diff = ends[0].pos - ends[1].pos;
