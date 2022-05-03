@@ -14,6 +14,7 @@ public class ImprovedTrack : MonoBehaviour
 
     public float Length = 0;
 
+    //the name of the file to pull the track from
     public string TrackName = "Test";
 
 
