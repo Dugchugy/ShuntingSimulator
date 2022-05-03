@@ -25,7 +25,7 @@ public class TrainController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        position += Input.GetAxis("Vertical") * SPEED * Time.fixedDeltaTime;
+        position += Input.GetAxis("Vertical") * SPEED * Time.fixedDeltaTime * -1;
 
         position = position % track.Length;
 
@@ -38,6 +38,13 @@ public class TrainController : MonoBehaviour
             position -= track.Length;
         }
 
+        //moves the connected point
         c.ends[0].dist = position;
+
+        //updates the connections connected to the moved point
+        c.ConnectConnect[0].ends[c.connectIndex[0]].dist = position;
+
+        //updates thier connections
+        c.ConnectConnect[0].UpdateConnections();
     }
 }

@@ -19,7 +19,7 @@ public class Connection : MonoBehaviour
     public GameObject[] connected = new GameObject[2];
 
     public int[] connectIndex = new int[2];
-    private Connection[] ConnectConnect = new Connection[2];
+    public Connection[] ConnectConnect = new Connection[2];
 
     public float[] startDist = new float[2];
 
@@ -53,6 +53,7 @@ public class Connection : MonoBehaviour
         //updates  the position of the cart
         transform.position = (ends[0].pos + ends[1].pos) / 2;
 
+        //adds the position offset
         transform.position += offset;
 
 
