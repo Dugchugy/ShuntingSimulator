@@ -14,12 +14,14 @@ public class ImprovedTrack : MonoBehaviour
 
     public float Length = 0;
 
+    public string TrackName = "Test";
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        points = TrackLoader.LoadTrack("Tracks/Test");
+        points = TrackLoader.LoadTrack("Tracks/" + TrackName);
 
         //TrackLoader.LoadTrack("Tracks/Test");
 
