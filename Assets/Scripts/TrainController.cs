@@ -12,6 +12,8 @@ public class TrainController : MonoBehaviour
 
     private Connection c;
 
+    public bool Auto = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +27,11 @@ public class TrainController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        position += Input.GetAxis("Vertical") * SPEED * Time.fixedDeltaTime * -1;
+        if(Auto){
+            position += SPEED * Time.fixedDeltaTime * -1;
+        }else{
+            position += Input.GetAxis("Vertical") * SPEED * Time.fixedDeltaTime * -1;
+        }
 
         position = position % track.Length;
 
