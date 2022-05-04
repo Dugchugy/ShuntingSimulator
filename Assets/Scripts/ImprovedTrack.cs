@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
 
 public class ImprovedTrack : MonoBehaviour
 {
@@ -12,7 +13,11 @@ public class ImprovedTrack : MonoBehaviour
 
     public Vector3[][] points = new Vector3[1][] {new Vector3[] {new Vector3(-10, 0, 0), new Vector3(-5, 0, 0), new Vector3(-5, 0, 5), new Vector3(0, 0, 5)}};
 
+    public float[] PointLengths = new float[1];
+
     public float Length = 0;
+
+    public Vector3 trackOffset = new Vector3();
 
     //the name of the file to pull the track from
     public string TrackName = "Test";
@@ -24,68 +29,94 @@ public class ImprovedTrack : MonoBehaviour
     {
         points = TrackLoader.LoadTrack("Tracks/" + TrackName);
 
+        trackOffset = transform.position;
+
         //TrackLoader.LoadTrack("Tracks/Test");
 
         //reads the current mesh filter
         MeshFilter meshF = GetComponent<MeshFilter>();
 
-        //creates a new mesh to edit
-        Mesh cloneMesh = new Mesh();
 
-        //give the new mesh two submeshes
-        cloneMesh.subMeshCount = 2;
+        if(meshF.mesh == null){
+            //creates a new mesh to edit
+            Mesh cloneMesh = new Mesh();
 
-        //names the mesh track
-        cloneMesh.name = "Track";
+            //give the new mesh two submeshes
+            cloneMesh.subMeshCount = 2;
 
-        //sets the mesh as the current mesh in the mesh filter
-        meshF.mesh = cloneMesh;
+            //names the mesh track
+            cloneMesh.name = TrackName;
 
-        //loops for every track section in hte track points array
-        for(int j = 0; j < points.Length; j++){
+            //sets the mesh as the current mesh in the mesh filter
+            meshF.mesh = cloneMesh;
 
-            //estimates the current length of the track segment to the specified PERECISION;
-            float Len = readLength(PERECISION, j);
+            PointLengths = new float[points.Length];
 
-            Length += Len;
+            //loops for every track section in hte track points array
+            for(int j = 0; j < points.Length; j++){
 
-            //defines lenth as the length floored to an int
-            int lenth = (int) (Len);
+                //estimates the current length of the track segment to the specified PERECISION;
+                float Len = readLength(PERECISION, j);
 
-            //generates a fractional offset from the start that the ties generate at
-            float offset = (Len - lenth) / 2.0f;
+                Length += Len;
 
-            //creates ends for the begining of the rails
-            CreateRailEnds(FindPoint(points[j], 0), cloneMesh, new Vector2(0.2f, 0.1f), FindDir(points[j], 0), new Vector2(0.1f, 0.7f));
+                PointLengths[j] = Len;
 
-            //loops through all the required ties
-            for(int i = 0; i <= lenth; i++){
+                //defines lenth as the length floored to an int
+                int lenth = (int) (Len);
 
-                //estimates the t value based on the distance along the curve
-                float t = FindTLength(offset + (float) (i), PERECISION, j);
+                //generates a fractional offset from the start that the ties generate at
+                float offset = (Len - lenth) / 2.0f;
 
-                //estimates the previous t value or assumes it to be zero
-                float t2;
+                //creates ends for the begining of the rails
+                CreateRailEnds(FindPoint(points[j], 0), cloneMesh, new Vector2(0.2f, 0.1f), FindDir(points[j], 0), new Vector2(0.1f, 0.7f));
 
-                if(i == 0){
-                    t2 = 0.0f;
-                }else{
-                    t2 = FindTLength(offset + (float) (i - 1), PERECISION, j);
+                //loops through all the required ties
+                for(int i = 0; i <= lenth; i++){
+
+                    //estimates the t value based on the distance along the curve
+                    float t = FindTLength(offset + (float) (i), PERECISION, j);
+
+                    //estimates the previous t value or assumes it to be zero
+                    float t2;
+
+                    if(i == 0){
+                        t2 = 0.0f;
+                    }else{
+                        t2 = FindTLength(offset + (float) (i - 1), PERECISION, j);
+                    }
+
+                    //generates a section of rails for the track
+                    CreateRailSection(t2, t, cloneMesh, new Vector2(0.2f, 0.1f), new Vector2(0.1f, 0.7f), j);
+
+                    //creates a tie under the rails
+                    CreateRect(FindPoint(points[j], t), cloneMesh, new Vector3(0.1f, 0.1f, 1.0f), FindDir(points[j], t));
                 }
 
-                //generates a section of rails for the track
-                CreateRailSection(t2, t, cloneMesh, new Vector2(0.2f, 0.1f), new Vector2(0.1f, 0.7f), j);
+                //creates the final segment
+                CreateRailSection(FindTLength(offset + lenth, PERECISION, j), 1.0f, cloneMesh, new Vector2(0.2f, 0.1f), new Vector2(0.1f, 0.7f), j);
 
-                //creates a tie under the rails
-                CreateRect(FindPoint(points[j], t), cloneMesh, new Vector3(0.1f, 0.1f, 1.0f), FindDir(points[j], t));
+                //caps off the ends of the rails
+                CreateRailEnds(FindPoint(points[j], 1), cloneMesh, new Vector2(0.2f, 0.1f), FindDir(points[j], 1), new Vector2(0.1f, 0.7f));
+
             }
 
-            //creates the final segment
-            CreateRailSection(FindTLength(offset + lenth, PERECISION, j), 1.0f, cloneMesh, new Vector2(0.2f, 0.1f), new Vector2(0.1f, 0.7f), j);
+            //saves the model
+            AssetDatabase.CreateAsset( cloneMesh, "Assets/Tracks/Models/" + TrackName + ".asset" );
+            AssetDatabase.SaveAssets();
+        }else{
 
-            //caps off the ends of the rails
-            CreateRailEnds(FindPoint(points[j], 1), cloneMesh, new Vector2(0.2f, 0.1f), FindDir(points[j], 1), new Vector2(0.1f, 0.7f));
+            PointLengths = new float[points.Length];
 
+            for(int i = 0; i < points.Length; i++){
+                //estimates the current length of the track segment to the specified PERECISION;
+                float Len = readLength(PERECISION, i);
+
+                //adds the found length to the current total length
+                Length += Len;
+
+                PointLengths[i] = Len;
+            }
         }
 
         MeshRenderer mr = GetComponent<MeshRenderer>();
@@ -96,15 +127,15 @@ public class ImprovedTrack : MonoBehaviour
     public Vector3 trackPosition(float pos){
 
         for(int i = 0; i < points.Length; i++){
-            if(readLength(PERECISION, i) > pos){
+            if( PointLengths[i] > pos){
                 float t = FindTLength(pos, PERECISION, i);
-                return(FindPoint(points[i], t));
+                return(FindPoint(points[i], t) + trackOffset);
             }
 
-            pos -= readLength(PERECISION, i);
+            pos -= PointLengths[i];
         }
 
-        return(FindPoint(points[points.Length - 1], 1));
+        return(FindPoint(points[points.Length - 1], 1) + trackOffset);
     }
 
     public float ClosestPos(float start, float end, float Distance, int reps)
@@ -136,40 +167,6 @@ public class ImprovedTrack : MonoBehaviour
                 current -= Length;
             }
         }
-
-
-        /*
-        //creates varaibels to store the current distance and closest point
-        float dist = 100000;
-        Vector3 closest = points[0][0];
-
-        //creates some variables to store the distance from the start of the track
-        float trackDist = 0;
-        float closestDist = 0;
-
-        Vector3 current = closest;
-
-        Vector3 prev = trackPosition(0);
-
-        for (int i = 0; i < points.Length; i++)
-        {
-            for(int j = 0; j < reps; j++)
-            {
-                current = FindPoint(points[i], ((float) j) / reps);
-
-                if(Vector3.Distance(current, p) < dist){
-                    closest = current;
-                    dist = Vector3.Distance(current, p);
-
-                    closestDist = trackDist;
-                }
-
-                trackDist += Vector3.Distance(prev, current);
-
-                prev = current;
-            }
-        }
-        */
 
         return (current);
     }
