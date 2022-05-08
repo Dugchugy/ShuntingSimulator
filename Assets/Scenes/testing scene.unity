@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &275843103 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4477443357542493255, guid: ab2f6051b7338f3439c9e226e31b553a, type: 3}
+  m_PrefabInstance: {fileID: 7367705444871778202}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &700112360 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 85559832942253562, guid: dcca278c700b37f41aac4c1d20bbbac3, type: 3}
@@ -312,6 +317,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4065738722683449614, guid: d17a6906f540b3545b78cc6642ccbf31, type: 3}
+      propertyPath: startDist.Array.data[0]
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 4065738722683449614, guid: d17a6906f540b3545b78cc6642ccbf31, type: 3}
+      propertyPath: startDist.Array.data[1]
+      value: 28
+      objectReference: {fileID: 0}
     - target: {fileID: 6450222575147556471, guid: d17a6906f540b3545b78cc6642ccbf31, type: 3}
       propertyPath: startDist.Array.data[0]
       value: 24
@@ -327,7 +340,7 @@ PrefabInstance:
     - target: {fileID: 8640259588677457948, guid: d17a6906f540b3545b78cc6642ccbf31, type: 3}
       propertyPath: connected.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 275843103}
     - target: {fileID: 8640259588677457948, guid: d17a6906f540b3545b78cc6642ccbf31, type: 3}
       propertyPath: startDist.Array.data[0]
       value: 15
@@ -397,6 +410,18 @@ PrefabInstance:
       propertyPath: connected.Array.data[1]
       value: 
       objectReference: {fileID: 3172651501937216748}
+    - target: {fileID: 4477443357542493252, guid: ab2f6051b7338f3439c9e226e31b553a, type: 3}
+      propertyPath: connected.Array.data[1]
+      value: 
+      objectReference: {fileID: 3172651501937216748}
+    - target: {fileID: 4477443357542493252, guid: ab2f6051b7338f3439c9e226e31b553a, type: 3}
+      propertyPath: startDist.Array.data[0]
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4477443357542493252, guid: ab2f6051b7338f3439c9e226e31b553a, type: 3}
+      propertyPath: startDist.Array.data[1]
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 8373123065319089637, guid: ab2f6051b7338f3439c9e226e31b553a, type: 3}
       propertyPath: m_Name
       value: Locomotive2

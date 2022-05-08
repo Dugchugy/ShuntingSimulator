@@ -6,6 +6,9 @@ public class BogeeController : MonoBehaviour
 {
     public Mesh SingleBogee;
     public Mesh DoubleBogee;
+    public Mesh LeadMesh;
+
+    public bool lead = false;
 
     private MeshFilter mf;
     private Connection c;
@@ -20,10 +23,14 @@ public class BogeeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(c.connected[1] != null){
-            mf.mesh = DoubleBogee;
+        if(!lead){
+            if(c.connected[1] != null){
+                mf.mesh = DoubleBogee;
+            }else{
+                mf.mesh = SingleBogee;
+            }
         }else{
-            mf.mesh = SingleBogee;
+            mf.mesh = LeadMesh;
         }
     }
 }
