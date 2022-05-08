@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7559850247549672716}
   - component: {fileID: 5696223358594066886}
   - component: {fileID: 6056761535637194768}
+  - component: {fileID: 8631353574995757423}
   m_Layer: 0
   m_Name: bogee pair
   m_TagString: Untagged
@@ -102,9 +103,26 @@ MonoBehaviour:
   - {fileID: 8819848617105804922}
   - {fileID: 0}
   connectIndex: 0100000000000000
+  ConnectConnect:
+  - {fileID: 0}
+  - {fileID: 0}
   startDist:
   - 30
   - 26
+--- !u!114 &8631353574995757423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6056761535637194771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c11258cc36a1346b1b2686a4ac8813, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SingleBogee: {fileID: -5495902117074765545, guid: 32ee5883dba96334481f480d649839fc, type: 3}
+  DoubleBogee: {fileID: -5495902117074765545, guid: c188dc0757defba4dba39afe6e38d3e9, type: 3}
 --- !u!1 &8819848617105804922
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +227,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 6056761535637194771}
   connectIndex: 0100000000000000
+  ConnectConnect:
+  - {fileID: 0}
+  - {fileID: 0}
   startDist:
   - 39
   - 30
