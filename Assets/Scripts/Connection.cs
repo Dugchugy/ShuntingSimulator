@@ -12,7 +12,7 @@ public class Connection : MonoBehaviour
 
     public Vector3[] prevends;
 
-    public ImprovedTrack track;
+    public TrackManager track;
 
     public Vector3 offset = new Vector3();
 
@@ -27,14 +27,14 @@ public class Connection : MonoBehaviour
     void Start()
     {
         //finds the current track manager
-        track = GameObject.Find("TrackSegment").GetComponent<ImprovedTrack>();
+        track = GameObject.Find("TrackSegment").GetComponent<TrackManager>();
 
         ends = new TrackPoint[2];
         prevends = new Vector3[2];
 
         for(int i = 0; i < 2; i++)
         {
-            ends[i] = new TrackPoint(startDist[i], transform.position);
+            ends[i] = new TrackPoint(startDist[i], transform.position, track.Head);
             prevends[i] = ends[i].pos;
         }
 
@@ -72,12 +72,72 @@ public class Connection : MonoBehaviour
 
         for(int i = 0; i < 2; i++)
         {
-            ends[i].pos = track.trackPosition(ends[i].dist);
+            if(ends[i].curNode == null){
+                ends[i].curNode = track.Head;
+            }
+            ends[i].pos = ends[i].curNode.FindPoint(ends[i].dist);
         }
 
-        UpdateConnections();
+        //UpdateConnections();
     }
 
+    public void UpdateConnections(){
+        //checks if the track links haven't been defined and defines them
+        for(int i = 0; i < 2; i++){
+            if(ends[i].curNode == null){
+                ends[i].curNode = track.Head;
+            }
+        }
+
+
+        //loops for each connected index
+        for (int i = 0; i < 2; i++){
+            //checks if the point has moved
+            if (ends[i].pos != prevends[i])
+            {
+                //loops until the positions have settled
+                bool loops = true;
+                while(loops){
+                    //finds the index of the other point
+                    int a  = Math.Abs(i - 1);
+
+                    //finds out how far apart the ends are
+                    float endDist = TrackManager.findDist(ends[i], ends[a]);
+
+                    //encompasses positive endDist
+                    if(endDist > 0){
+                        //moves the point so it is in the right place
+                        loops = TrackManager.MovePoint(ref ends[a], length - endDist);
+                    }else{
+                        //moves the point so it is in the right place
+                        loops = TrackManager.MovePoint(ref ends[a], -endDist - length);
+                    }
+
+                    //move the pysical point to the new track point
+                    ends[a].pos = ends[a].curNode.FindPoint(ends[a].dist);
+
+                    //prevents updating for this movement
+                    prevends[a] = ends[a].pos;
+
+                    //checks if there is something conencted to this segment
+                    if(ConnectConnect[a] != null){
+                        //updates the conencted objects ends point to be equal to the changed one
+                        ConnectConnect[a].ends[connectIndex[a]] = ends[a];
+
+                        //queues the connected object to update its connections
+                        ConnectConnect[a].UpdateConnections();
+                    }
+
+                    //if the loop is continueing, changes so its now altering the other point
+                    if(loops){
+                        i = a;
+                    }
+                }
+            }
+        }
+    }
+
+    /*
     public void UpdateConnections(){
 
         //loops for each connected index
@@ -87,7 +147,7 @@ public class Connection : MonoBehaviour
             {
                 ends[i].pos = track.trackPosition(ends[i].dist);
 
-                //finds the endex of the other point
+                //finds the index of the other point
                 int a  = Math.Abs(i - 1);
 
                 //finds the sign of the track distance between points
@@ -132,4 +192,5 @@ public class Connection : MonoBehaviour
 
         return(x);
     }
+    */
 }

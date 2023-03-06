@@ -8,7 +8,7 @@ public class TrainController : MonoBehaviour
 
     public float position = 30;
 
-    public ImprovedTrack track;
+    //public ImprovedTrack track;
 
     private Connection c;
 
@@ -18,7 +18,7 @@ public class TrainController : MonoBehaviour
     void Start()
     {
 
-        track = GameObject.Find("TrackSegment").GetComponent<ImprovedTrack>();
+        //track = GameObject.Find("TrackSegment").GetComponent<ImprovedTrack>();
         c = GetComponent<Connection>();
 
         position = c.startDist[0];
@@ -27,30 +27,40 @@ public class TrainController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        Debug.Log("Moved Train");
+
+        float posChange = 0;
+
         if(Auto){
-            position += SPEED * Time.fixedDeltaTime * -1;
+            posChange = SPEED * Time.fixedDeltaTime * -1;
         }else{
-            position += Input.GetAxis("Vertical") * SPEED * Time.fixedDeltaTime * -1;
+            posChange = Input.GetAxis("Vertical") * SPEED * Time.fixedDeltaTime * -1;
         }
 
-        position = position % track.Length;
+        Debug.Log("Point Before movement: " + c.ends[0].pos);
 
-        if(position < 0){
-            position += track.Length;
+    /*
+        Debug.Log("Predicted point before movemnt: " + c.ends[0].curNode.FindPoint(c.ends[0].dist));
 
-            Debug.Log(track.Length);
-        }
-        if(position > track.Length){
-            position -= track.Length;
-        }
+        Debug.Log("PointDist before movement: " + c.ends[0].dist);
+
+        Debug.Log("DistChange: " + posChange);*/
 
         //moves the connected point
-        c.ends[0].dist = position;
+        TrackManager.MovePoint(ref c.ends[0], posChange);
 
-        //updates the connections connected to the moved point
-        c.ConnectConnect[0].ends[c.connectIndex[0]].dist = position;
 
-        //updates thier connections
-        c.ConnectConnect[0].UpdateConnections();
+        Debug.Log("point after movement: " + c.ends[0].pos);
+
+        /*
+        Debug.Log("Predicted point after movemnt: " + c.ends[0].curNode.FindPoint(c.ends[0].dist));
+
+        Debug.Log("Pointdist after movement: " + c.ends[0].dist);*/
+
+        //calls c to update its connections
+        c.UpdateConnections();
+
+        Debug.Log("point after connection Updated: " +  c.ends[0].pos);
     }
 }
+

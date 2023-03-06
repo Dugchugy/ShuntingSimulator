@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEditor;
-
+/*
 public class ImprovedTrack : MonoBehaviour
 {
     [SerializeField] private Material TIEMAT;
@@ -528,3 +528,4 @@ public class ImprovedTrack : MonoBehaviour
         return(1.0f);
     }
 }
+*/
