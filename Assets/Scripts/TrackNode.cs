@@ -15,7 +15,7 @@ public class TrackNode
     public float length;
 
     //an int to determine how many repitions to do when calculating length
-    public const int PERECISION = 100;
+    public const int PERECISION = 250;
 
     //creates a new track segment with the specifed points array
     public TrackNode(Vector3[] TPs){

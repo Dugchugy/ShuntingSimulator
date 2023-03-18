@@ -60,6 +60,17 @@ public class TrainController : MonoBehaviour
         //calls c to update its connections
         c.UpdateConnections();
 
+
+        //checks if there is anything attached to the connection end being moved
+        if(c.ConnectConnect[0] != null){
+            //moves the item attached to the specifed connection end
+            TrackManager.MovePoint(ref c.ConnectConnect[0].ends[1], posChange);
+
+            //updates the conected objects connections
+            c.ConnectConnect[0].UpdateConnections();
+
+        }
+
         Debug.Log("point after connection Updated: " +  c.ends[0].pos);
     }
 }
