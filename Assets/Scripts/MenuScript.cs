@@ -5,6 +5,8 @@ public class MenuScript : MonoBehaviour
 {
     public GameObject[] menuLayers;
 
+    private int[] LevelIndexs = new int[]{1, 2};
+
     void Start(){
         //moves to main menu on scene start
         gotoMain();
@@ -16,7 +18,7 @@ public class MenuScript : MonoBehaviour
     }
 
     public void selectLevel(int level){
-        
+
     }
 
     public void gotoMain(){

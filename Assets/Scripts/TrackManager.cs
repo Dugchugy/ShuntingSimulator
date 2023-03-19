@@ -7,6 +7,8 @@ public class TrackManager : MonoBehaviour
     //a pointer to the first segment in the track
     public TrackNode Head;
 
+    public string trackName = "MenuTrack1";
+
     //defines the materials to be used to build the track
     [SerializeField] private Material TIEMAT;
     [SerializeField] private Material RAILMAT;
@@ -17,7 +19,15 @@ public class TrackManager : MonoBehaviour
         //moves this object to (0,0,0) modeling is always right
         transform.position = new Vector3(0,0,0);
 
-        Head = TrackLoader.LoadTrack("Tracks/MenuTrack1");
+        Head = TrackLoader.LoadTrack("Tracks/" + trackName);
+    }
+
+    void FixedUpdate(){
+        //Debug.Log("point for 1.8: " + Head.FindPoint(1.8f));
+        //Debug.Log("point for 2.0: " + Head.FindPoint(2.0f));
+        //Debug.Log("t for 1.8: " + Head.findT(1.8f));
+        //Debug.Log("t for 2.0: " + Head.findT(2.0f));
+        //Debug.Log("head length: " + Head.length);
     }
 
     //moves a track point a specifed distance
@@ -30,7 +40,7 @@ public class TrackManager : MonoBehaviour
 
             //checks if this node has another node after it
             if(p.curNode.Next != null){
-                //moves p to hte next node
+                //moves p to the next node
                 p.dist -= p.curNode.length;
                 p.curNode = p.curNode.Next;
             }else{

@@ -15,7 +15,7 @@ public class TrackNode
     public float length;
 
     //an int to determine how many repitions to do when calculating length
-    public const int PERECISION = 250;
+    public const int PERECISION = 100;
 
     //creates a new track segment with the specifed points array
     public TrackNode(Vector3[] TPs){
@@ -55,13 +55,14 @@ public class TrackNode
     }
 
     public float findT(float l){
+
         //creates a varaible to stor the previous vector
         Vector3 prePoint = findPointT(0);
 
         //creates a vari8able tos store the current vector
         Vector3 curPoint = prePoint;
 
-        for(float t = 1.0f/PERECISION; t < (PERECISION + 1.0f)/PERECISION; t += 1.0f/PERECISION){
+        for(float t = 1.0f/PERECISION; t < 1.0f + (1.0f/PERECISION); t += 1.0f/PERECISION){
             //finds the current point
             curPoint = findPointT(t);
 
@@ -69,9 +70,11 @@ public class TrackNode
             float dist = Vector3.Distance(curPoint, prePoint);
 
             if(dist > l){
-                return (t - (1/PERECISION)) + ((1 - (l/dist)) * (1/PERECISION));
+                
+                return ((t - (1/PERECISION)) + ((l/dist) * (1.0f/PERECISION)));
             }else{
                 l = l - dist;
+
             }
 
             //sets the prevPoint to the current point (for the next cycle)

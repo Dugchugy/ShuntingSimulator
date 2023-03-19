@@ -16,6 +16,8 @@ public class Connection : MonoBehaviour
 
     public Vector3 offset = new Vector3();
 
+    public bool debugLog = false;
+
     public GameObject[] connected = new GameObject[2];
 
     public int[] connectIndex = new int[2];
@@ -82,6 +84,10 @@ public class Connection : MonoBehaviour
     }
 
     public void UpdateConnections(){
+        if(debugLog){
+            Debug.Log("update connections running");
+        }
+
         //checks if the track links haven't been defined and defines them
         for(int i = 0; i < 2; i++){
             if(ends[i].curNode == null){
@@ -95,9 +101,19 @@ public class Connection : MonoBehaviour
             //checks if the point has moved
             if (ends[i].pos != prevends[i])
             {
+                if(debugLog){
+                    Debug.Log("movement detected on index " + i);
+                    Debug.Log("current pos: " + ends[i].pos);
+                    Debug.Log("previous pos: " + prevends[i]);
+                }
+
+
                 //loops until the positions have settled
                 bool loops = true;
                 while(loops){
+                    if(debugLog){
+                        Debug.Log("now correcting for index " + i);
+                    }
                     //finds the index of the other point
                     int a  = Math.Abs(i - 1);
 
@@ -127,12 +143,17 @@ public class Connection : MonoBehaviour
                         //queues the connected object to update its connections
                         ConnectConnect[a].UpdateConnections();
                     }
+                    
+
+                    //marks that this change has been acounted for and updates prevends
+                    prevends[i] = ends[i].pos;
 
                     //if the loop is continueing, changes so its now altering the other point
                     if(loops){
                         i = a;
                     }
                 }
+
             }
         }
     }

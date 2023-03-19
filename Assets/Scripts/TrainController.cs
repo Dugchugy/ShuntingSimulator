@@ -27,6 +27,11 @@ public class TrainController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //ensures that the current node is always valid
+        if(c.ends[0].curNode == null){
+            c.ends[0].curNode = c.track.Head;
+        }
+
         Debug.Log("Moved Train");
 
         float posChange = 0;
@@ -37,32 +42,38 @@ public class TrainController : MonoBehaviour
             posChange = Input.GetAxis("Vertical") * SPEED * Time.fixedDeltaTime * -1;
         }
 
-        Debug.Log("Point Before movement: " + c.ends[0].pos);
+        //Debug.Log("Point Before movement: " + c.ends[0].pos);
 
     /*
-        Debug.Log("Predicted point before movemnt: " + c.ends[0].curNode.FindPoint(c.ends[0].dist));
+        Debug.Log("Predicted point before movemnt: " + c.ends[0].curNode.FindPoint(c.ends[0].dist));*/
 
-        Debug.Log("PointDist before movement: " + c.ends[0].dist);
+        //Debug.Log("PointDist before movement: " + c.ends[0].dist);
 
-        Debug.Log("DistChange: " + posChange);*/
+        //Debug.Log("DistChange: " + posChange);
 
         //moves the connected point
         TrackManager.MovePoint(ref c.ends[0], posChange);
 
 
-        Debug.Log("point after movement: " + c.ends[0].pos);
+        //Debug.Log("point after movement: " + c.ends[0].pos);
 
-        /*
-        Debug.Log("Predicted point after movemnt: " + c.ends[0].curNode.FindPoint(c.ends[0].dist));
+        //Debug.Log("Predicted point after movemnt: " + c.ends[0].curNode.FindPoint(c.ends[0].dist));
 
-        Debug.Log("Pointdist after movement: " + c.ends[0].dist);*/
+        //Debug.Log("Pointdist after movement: " + c.ends[0].dist);
 
         //calls c to update its connections
         c.UpdateConnections();
 
+        //Debug.Log("pointdist after connections update: " + c.ends[0].dist);
+
 
         //checks if there is anything attached to the connection end being moved
         if(c.ConnectConnect[0] != null){
+            //ensures that the current node is always valid
+            if(c.ConnectConnect[0].ends[1].curNode == null){
+                c.ConnectConnect[0].ends[1].curNode = c.ConnectConnect[1].track.Head;
+            }
+
             //moves the item attached to the specifed connection end
             TrackManager.MovePoint(ref c.ConnectConnect[0].ends[1], posChange);
 
@@ -71,7 +82,9 @@ public class TrainController : MonoBehaviour
 
         }
 
-        Debug.Log("point after connection Updated: " +  c.ends[0].pos);
+        //Debug.Log("pointdist after second conenctions update: "  + c.ends[0].dist);
+
+        //Debug.Log("point after connection Updated: " +  c.ends[0].pos);
     }
 }
 
