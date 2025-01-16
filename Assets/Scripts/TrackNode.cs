@@ -50,6 +50,7 @@ public class TrackNode
 
     //finds the vector3 position associated with the distance along the track provided
     public Vector3 FindPoint(float l){
+        Debug.Log("finding point at length " + l);
         //returns the position along the track given by the t value found by divding the distance by length
         return FindPoint(points, findT(l));
     }
@@ -86,10 +87,26 @@ public class TrackNode
         return 1;
     }
 
+    public static Vector3 FindPoint(Vector3[] pts, float t){
+        //creates a copy of pts for working with
+        Vector3[] workingPts = new Vector3[pts.Length];
+        pts.CopyTo(workingPts, 0);
 
+        //creates a variable to store the effective lenth of the array
+        int workinglength = pts.Length;
+
+        //loops until the list has been reduced to one element
+        while(workinglength > 1){
+
+        }
+
+        return workingPts[0];
+
+         
+    }
 
     //uses the points array to find a point on the track
-    public static Vector3 FindPoint(Vector3[] pts, float t){
+    public static Vector3 FindPointR(Vector3[] pts, float t){
 
         //ensures make sure theres always multiple items in the array
         if(pts.Length == 1){

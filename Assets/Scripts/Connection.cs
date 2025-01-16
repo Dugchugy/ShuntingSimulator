@@ -101,6 +101,8 @@ public class Connection : MonoBehaviour
             //checks if the point has moved
             if (ends[i].pos != prevends[i])
             {
+                int reflections = 0;
+
                 if(debugLog){
                     Debug.Log("movement detected on index " + i);
                     Debug.Log("current pos: " + ends[i].pos);
@@ -151,8 +153,11 @@ public class Connection : MonoBehaviour
                     //if the loop is continueing, changes so its now altering the other point
                     if(loops){
                         i = a;
+                        reflections++;
                     }
                 }
+
+                Debug.Log("reflected " + reflections + " times");
 
             }
         }
